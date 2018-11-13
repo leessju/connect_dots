@@ -7,6 +7,7 @@ const fs         = require('fs');
 var compression  = require('compression');
 const helmet     = require('helmet');
 const morgan     = require('morgan');
+const multer     = require('multer');
 const common     = require('./server/utils/common');
 const keys       = require('./server/config/keys');
 
@@ -24,6 +25,31 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
 });
+
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'images');
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().toISOString() + '-' + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
+app.use('/images', express.static(path.join(__dirname, 'server/public/images')));
 
 const options = {
   useNewUrlParser: true,
