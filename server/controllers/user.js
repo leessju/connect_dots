@@ -1,7 +1,7 @@
 const User                       = require('../models/User');
 const UserInfo                   = require('../models/UserInfo');
 const { valRegister, valLogin }  = require('./validations/user');
-const { content, error_content } = require('../utils/common');
+const { content, error_content, isEmpty } = require('../utils/common');
 
 const bcrypt                     = require('bcryptjs');
 const jwt                        = require('jsonwebtoken');
@@ -40,7 +40,7 @@ exports.current = async (req, res) => {
 exports.login = async (req, res, next) => {
   const errors = valLogin(req.body);
 
-  if (errors.error_yn === 'Y') {
+  if (!isEmpty(errors)) {
     return res.status(400).json(content('', '3000', errors));
   }
 
@@ -52,18 +52,15 @@ exports.login = async (req, res, next) => {
     .then(user => {
       // Check for user
       if (!user) {
-        errors.error_yn = 'Y'
         errors.error_msg = 'User not found';
-        return res.status(404).json(content('', '2000', errors));
+        return res.status(404).json(content('', '3000', errors));
       }
 
       // Check
       bcrypt.compare(pwd, user.pwd)
         .then(isMatch => {
           if (isMatch) {
-            //res.json({msg: 'Success'});
-            // User Matched
-
+            
             const payload = { 
               id       : user.id, 
               user_id  : user.user_id, 
@@ -93,8 +90,15 @@ exports.login = async (req, res, next) => {
 exports.register = async (req, res, next) => {
   const errors = valRegister(req.body);
 
-  if (errors.error_yn === 'Y') {
+  if (!isEmpty(errors)) {
     return res.status(400).json(content('', '3000', errors));
+  }
+
+  const isExist = await User.find({user_id: req.body.user_id});
+
+  if(isExist.length > 0) {
+    errors.user_id = 'user_id already existed';
+    return res.status(404).json(content('', '3000', errors));
   }
 
   const newUser = new User({

@@ -4,9 +4,13 @@
   "description": "The life is connecting a bunch of dots to make sense of something, figure something out. Just give it a try.",
   "main": "server.js",
   "scripts": {
+    "client-install": "npm install --prefix client",
     "start": "node server.js",
     "server": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "nodemon --debug-brk --inspect server.js"
   },
   "keywords": [
     "Node.js",
@@ -34,10 +38,12 @@
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
     "mysql2": "^1.6.4",
+    "npm": "^6.4.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "pm2": "^3.2.2",
     "sequelize": "^4.41.1",
+    "sharp": "^0.21.0",
     "validator": "^10.9.0"
   },
   "devDependencies": {

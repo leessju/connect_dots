@@ -43,7 +43,8 @@ module.exports = {
   },
   log: (log_text) => {
     console.log(log_text);
-  }
+  },
+  isEmpty: checkEmpty
 };
 
 function checkEmpty(value) {

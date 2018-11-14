@@ -69,7 +69,7 @@ const options = {
 mongoose
   .connect(keys.MONGODB_URI, options)
   .then(() => {
-    console.log('Mongodb connected!!');
+    console.log('Mongodb connected!!!!!!!!');
     app.use(passport.initialize());
     require('./server/config/passport')(passport);
   })
