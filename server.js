@@ -11,13 +11,13 @@ const multer     = require('multer');
 const common     = require('./server/utils/common');
 const keys       = require('./server/config/keys');
 
-const app = express();
+const app        = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(helmet());
 app.use(compression());
-app.use(morgan('combined', { stream: fs.createWriteStream(path.join(__dirname, 'server/log', `${common.today('YYYY_MM_DD')}.log`), { flags: 'a' })}));
+app.use(morgan('combined', { stream: fs.createWriteStream(path.join(__dirname, keys.LOG_DIR, `${common.today('YYYY_MM_DD')}.log`), { flags: 'a' })}));
 app.use(express.static(path.join(__dirname, 'server/public')));
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -26,30 +26,21 @@ app.use((req, res, next) => {
   next();
 });
 
-
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'images');
-  },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + '-' + file.originalname);
-  }
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, keys.UPLOAD_DIR),
+  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
 });
 
 const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === 'image/png' ||
-    file.mimetype === 'image/jpg' ||
-    file.mimetype === 'image/jpeg'
-  ) {
+  if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
     cb(null, true);
   } else {
     cb(null, false);
   }
 };
 
-app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
-app.use('/images', express.static(path.join(__dirname, 'server/public/images')));
+app.use(multer({ storage, fileFilter }).single('image'));
+app.use('/images', express.static(path.join(__dirname, keys.UPLOAD_DIR)));
 
 const options = {
   useNewUrlParser: true,
@@ -79,6 +70,7 @@ mongoose
 
 app.use('/api/code', require('./server/routes/code'));
 app.use('/api/user', require('./server/routes/user'));
+app.use('/api/file', require('./server/routes/file'));
 
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to My nicejames\' World.<br>You will get the easier mood than where you are.</h1>');

@@ -8,6 +8,7 @@ router.get('/my/current', passport.authenticate('jwt', { session: false }), user
 router.get('/:id', userController.getById);
 router.post('/login', userController.login);
 router.post('/register', userController.register);
+router.post('/upload', userController.upload);
 router.put('/update', passport.authenticate('jwt', { session: false }), userController.update);
 router.delete('/', passport.authenticate('jwt', { session: false }), userController.delete);
 

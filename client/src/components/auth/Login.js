@@ -41,7 +41,7 @@ class Login extends Component {
 
   componentDidMount() {
     if(this.props.auth.isAuthenticated) {
-      this.props.history.push('/');
+      this.props.history.push('/dashboard');
     }
   }
 
@@ -65,7 +65,7 @@ class Login extends Component {
 
     return (
       <div>
-        
+
         <div className="login">
           <div className="container">
             <div className="row">

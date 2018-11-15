@@ -15,5 +15,6 @@ module.exports = {
   SMTP_FROM   : process.env.SMTP_FROM,
 
   DOWNLOAD_URL: process.env.DOWNLOAD_URL,
-  UPLOAD_DIR  : process.env.UPLOAD_DIR
+  UPLOAD_DIR  : process.env.UPLOAD_DIR,
+  LOG_DIR     : process.env.LOG_DIR
 };
