@@ -1,27 +1,27 @@
 module.exports = {
   user: {
-    thumb: { w:200, h:200, nickname: 't'},
-    cover: { w:400, h:400, nickname: 'c'},
-    small: { w:300, h:300, nickname: 's'},
+    thumb: { seq:1, w:200, h:200, nickname: 't', fit:'outside'},
+    cover: { seq:2, w:400, h:400, nickname: 'c', fit:'outside'},
+    small: { seq:3, w:300, h:300, nickname: 's', fit:'outside'},
   },
   supply: {
-    thumb: { w:200, h:200, nickname: 't'},
-    cover: { w:400, h:400, nickname: 'c'},
-    small: { w:300, h:300, nickname: 's'},
+    thumb: { seq:1, w:200, h:200, nickname: 't', fit:'cover'},
+    cover: { seq:2, w:400, h:400, nickname: 'c', fit:'cover'},
+    small: { seq:3, w:300, h:300, nickname: 's', fit:'cover'},
   },
   step: {
-    thumb: { w:200, h:200, nickname: 't'},
-    cover: { w:400, h:400, nickname: 'c'},
-    small: { w:300, h:300, nickname: 's'},
+    thumb: { seq:1, w:200, h:200, nickname: 't', fit:'cover'},
+    cover: { seq:2, w:400, h:400, nickname: 'c', fit:'cover'},
+    small: { seq:3, w:300, h:300, nickname: 's', fit:'cover'},
   },
   coupon: {
-    thumb: { w:200, h:200, nickname: 't'},
-    cover: { w:400, h:400, nickname: 'c'},
-    small: { w:300, h:300, nickname: 's'},
+    thumb: { seq:1, w:200, h:200, nickname: 't', fit:'cover'},
+    cover: { seq:2, w:400, h:400, nickname: 'c', fit:'cover'},
+    small: { seq:3, w:300, h:300, nickname: 's', fit:'cover'},
   }, 
   board: {
-    thumb: { w:200, h:200, nickname: 't'},
-    cover: { w:400, h:400, nickname: 'c'},
-    small: { w:300, h:300, nickname: 's'},
+    thumb: { seq:1, w:200, h:200, nickname: 't', fit:'cover'},
+    cover: { seq:2, w:400, h:400, nickname: 'c', fit:'cover'},
+    small: { seq:3, w:300, h:300, nickname: 's', fit:'cover'},
   }
 };

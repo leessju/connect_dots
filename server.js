@@ -28,8 +28,14 @@ app.use((req, res, next) => {
 });
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(keys.PUBLIC_DIR, keys.UPLOAD_DIR)),
-  filename: (req, file, cb) => {
+  destination: (req, file, cb) => {
+    const dir = path.join(process.cwd(), path.join(keys.PUBLIC_DIR, keys.UPLOAD_DIR, common.today('YYYYMMDD')));
+    // dir = path.join(keys.PUBLIC_DIR, keys.UPLOAD_DIR, common.today('YYYYMMDD'));
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
+    cb(null, dir);
+  }, filename: (req, file, cb) => {
     crypto.pseudoRandomBytes(16, function(err, raw) {
       const ext = path.extname(file.originalname);
       const fileName = raw.toString('hex') + ext;
