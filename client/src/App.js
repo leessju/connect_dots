@@ -22,8 +22,8 @@ if(localStorage.jwtToken) {
 
   const currentTime = Date.now() / 1000;
 
-  console.log(decode.exp);
-  console.log(currentTime);
+  // console.log(decode.exp);
+  // console.log(currentTime);
 
   if(decode.exp < currentTime) {
     localStorage.removeItem('jwtToken');

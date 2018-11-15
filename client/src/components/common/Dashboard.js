@@ -26,6 +26,7 @@ onUploadImages = _ => {
   const uploaders = this.state.images.map(image => {
     const data = new FormData();
     data.append("image", image, image.name);
+    data.append("file_key", 'user');
     
     return axios.post('/api/file/upload', data)
       .then(res => {

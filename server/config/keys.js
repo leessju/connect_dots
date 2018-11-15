@@ -16,5 +16,6 @@ module.exports = {
 
   DOWNLOAD_URL: process.env.DOWNLOAD_URL,
   UPLOAD_DIR  : process.env.UPLOAD_DIR,
-  LOG_DIR     : process.env.LOG_DIR
+  LOG_DIR     : process.env.LOG_DIR,
+  PUBLIC_DIR  : process.env.PUBLIC_DIR
 };

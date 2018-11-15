@@ -8,6 +8,7 @@ var compression  = require('compression');
 const helmet     = require('helmet');
 const morgan     = require('morgan');
 const multer     = require('multer');
+const crypto     = require('crypto');
 const common     = require('./server/utils/common');
 const keys       = require('./server/config/keys');
 
@@ -18,7 +19,7 @@ app.use(bodyParser.json());
 app.use(helmet());
 app.use(compression());
 app.use(morgan('combined', { stream: fs.createWriteStream(path.join(__dirname, keys.LOG_DIR, `${common.today('YYYY_MM_DD')}.log`), { flags: 'a' })}));
-app.use(express.static(path.join(__dirname, 'server/public')));
+app.use(express.static(path.join(__dirname, keys.PUBLIC_DIR)));
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
@@ -27,8 +28,14 @@ app.use((req, res, next) => {
 });
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, keys.UPLOAD_DIR),
-  filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+  destination: (req, file, cb) => cb(null, path.join(keys.PUBLIC_DIR, keys.UPLOAD_DIR)),
+  filename: (req, file, cb) => {
+    crypto.pseudoRandomBytes(16, function(err, raw) {
+      const ext = path.extname(file.originalname);
+      const fileName = raw.toString('hex') + ext;
+      cb(null, fileName);
+    });
+  }
 });
 
 const fileFilter = (req, file, cb) => {
@@ -40,7 +47,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 app.use(multer({ storage, fileFilter }).single('image'));
-app.use('/images', express.static(path.join(__dirname, keys.UPLOAD_DIR)));
+app.use('/images', express.static(path.join(__dirname, path.join(keys.PUBLIC_DIR, keys.UPLOAD_DIR))));
 
 const options = {
   useNewUrlParser: true,
