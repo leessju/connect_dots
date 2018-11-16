@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(helmet());
 app.use(compression());
-app.use(morgan('combined', { stream: fs.createWriteStream(path.join(__dirname, keys.LOG_DIR, `${common.today('YYYY_MM_DD')}.log`), { flags: 'a' })}));
+//app.use(morgan('combined', { stream: fs.createWriteStream(path.join(__dirname, keys.LOG_DIR, `${common.today('YYYY_MM_DD')}.log`), { flags: 'a' })}));
 app.use(express.static(path.join(__dirname, keys.PUBLIC_DIR)));
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
