@@ -85,6 +85,13 @@ app.use('/api/code', require('./server/routes/code'));
 app.use('/api/user', require('./server/routes/user'));
 app.use('/api/file', require('./server/routes/file'));
 
+if(keys.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  })
+}
+
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to My nicejames\' World.<br>You will get the easier mood than where you are.</h1>');
 });
