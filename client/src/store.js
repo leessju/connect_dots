@@ -5,13 +5,22 @@ import roootReducer from './reducers';
 const initialState = {};
 const middleware = [thunk];
 
-const store = createStore(
-  roootReducer, 
-  initialState, 
-  compose(
-    applyMiddleware(...middleware)
-    //,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  ) 
-);
+let store;
+
+if (window.navigator.userAgent.includes('Chrome')) {
+  store = createStore(
+    roootReducer, 
+    initialState, 
+    compose(
+      applyMiddleware(...middleware),
+      window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    ) 
+  );
+} else {
+  store = createStore(
+    roootReducer, 
+    initialState, 
+    applyMiddleware(...middleware));
+}
 
 export default store;
