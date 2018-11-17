@@ -24,13 +24,6 @@ exports.getById = async (req, res, next) => {
   }
 };
 
-exports.upload = async (req, res, next) => {
-  //console.log(req);
-  //console.log(req.files);
-  const values = Object.values(req.body)
-  console.log(values);
-};
-
 exports.current = async (req, res) => {
   try {
     const result = await User.findById(req.user.id)
