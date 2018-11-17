@@ -17,6 +17,7 @@ const app        = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(helmet());
+app.disable('x-powered-by');
 app.use(compression());
 app.use(morgan('combined', { stream: fs.createWriteStream(path.join(__dirname, keys.LOG_DIR, `${common.today('YYYY_MM_DD')}.log`), { flags: 'a' })}));
 app.use(express.static(path.join(__dirname, keys.PUBLIC_DIR)));
@@ -89,6 +90,7 @@ if(keys.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    console.log('---=== production ---===');
   })
 }
 

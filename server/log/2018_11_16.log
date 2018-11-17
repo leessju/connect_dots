@@ -1,2 +1,0 @@
-::ffff:127.0.0.1 - - [16/Nov/2018:06:19:53 +0000] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 171 "-" "Safari/14606.2.104.1.1 CFNetwork/975.0.3 Darwin/18.2.0 (x86_64)"
-::ffff:127.0.0.1 - - [16/Nov/2018:06:19:53 +0000] "GET /apple-touch-icon.png HTTP/1.1" 404 159 "-" "Safari/14606.2.104.1.1 CFNetwork/975.0.3 Darwin/18.2.0 (x86_64)"
