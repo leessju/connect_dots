@@ -1,14 +1,13 @@
 //const crypto    = require('crypto');
 //const { promisify } = require('util');
-const fs            = require('fs');
-const path          = require('path');
-const sharp         = require('sharp');
-const sizeOf        = require('image-size');
-const File          = require('../models/File');
-const keys          = require('../config/keys');
-const imgsize       = require('../config/imageSize');
-const common        = require('../utils/common');
-
+const fs      = require('fs');
+const path    = require('path');
+const sharp   = require('sharp');
+const sizeOf  = require('image-size');
+const File    = require('../models/File');
+const keys    = require('../config/keys');
+const imgsize = require('../config/imageSize');
+const common  = require('../utils/common');
 
 saveFile = async (fileInfo) => {
   const newFile = new File(fileInfo);
@@ -51,7 +50,7 @@ exports.upload = async (req, res, next) => {
 
     if(file_path) {
 
-      fs.readFile(fullPath, (err, data)=> {
+      fs.readFile(fullPath, (err, data) => {
         if(err) 
           res.status(500).send(err);
 
