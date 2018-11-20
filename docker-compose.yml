@@ -1,0 +1,69 @@
+version: "3"
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    # restart: always
+    volumes:
+      - /Users/nicejames/learn/db_data/01:/data
+    ports:
+      - "27017:27017"
+  # mongo:
+  #   image: 'bitnami/mongodb:latest'
+  #   container_name: mongo
+  #   ports:
+  #     - "27017:27017"
+  #   # volumes:
+  #   #   - /Users/nicejames/learn/mongodb/connect_dots:/bitnami
+  #   environment:
+  #     # - MONGODB_USERNAME=user
+  #     # - MONGODB_PASSWORD=a1234!
+  #     # - MONGODB_DATABASE=connect_dots
+  #     - ALLOW_EMPTY_PASSWORD=yes
+  #     - MONGODB_EXTRA_FLAGS=--wiredTigerCacheSizeGB=2
+  node:
+    # image: "nicejames/node:latest"
+    build: .
+    restart: always
+    user: "node"
+    container_name: node
+    working_dir: /usr/src/app
+    volumes:
+      - /Users/nicejames/learn/node/connect_dots:/usr/src/app
+    ports:
+    #  - "3000:3000"
+     - "5000:5000"
+     #- "57493:57493"
+    command: "pm2-runtime process.yml"
+    environment:
+      WAIT_HOSTS: mongo:27017
+    links:
+      - mongo
+ # https://www.youtube.com/watch?v=hP77Rua1E0c&t=320s
+
+ # http://miiingo.tistory.com/92
+    #build: .
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.puma
+
+      #https://hub.docker.com/r/bitnami/mongodb/
+      #docker-compose logs
+
+
+# version: '3'
+# services:
+#   app:
+#     container_name: docker-node-mongo
+#     restart: always
+#     build: .
+#     ports:
+#       - '3000:3000'
+#       - '5000:5000'
+#     links:
+#       - mongo
+#   mongo:
+#     container_name: mongo
+#     image: mongo
+#     ports:
+#       - '27017:27017'

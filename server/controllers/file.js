@@ -2,7 +2,8 @@
 //const { promisify } = require('util');
 const fs      = require('fs');
 const path    = require('path');
-const sharp   = require('sharp');
+//const sharp   = require('sharp');
+var jimp = require('jimp');
 const sizeOf  = require('image-size');
 const File    = require('../models/File');
 const keys    = require('../config/keys');
@@ -57,42 +58,81 @@ exports.upload = async (req, res, next) => {
         //https://sharp.dimens.io/en/stable/api-resize/
         for(const file_key in imgsize[file_path]) {
           const sizeInfo = imgsize[file_path][file_key];
-          sharp(fullPath)
-            //.rotate(200)
-            .resize(
-              sizeInfo.w, 
-              sizeInfo.h,{
-                kernel: sharp.kernel.nearest,
-                fit: sizeInfo.fit //cover(수치대로), contain(포함하여,여백은 투명), fill(모두이미지포함,이그러짐), inside(절대사이즈 맞춤, 작아짐) or outside(절대사이즈 맞춤, 커짐). (optional, default 'cover')
-                //position: 'right bottom' //cover or contain. (optional, default 'centre')
-                //background: { r: 255, g: 255, b: 0, alpha: 0.5 }
+
+
+          jimp.read(fullPath)
+            .then(lenna => {
+
+              const fileName = onlyfileNam + sizeInfo.nickname + ext;
+              const f        = path.join(dir, fileName);
+
+              const img = lenna
+                .resize(sizeInfo.w, sizeInfo.h) // resize
+                .quality(80) // set JPEG quality
+                .write(f); // save
+
+                img.file = f;
+              return img;
             })
-            .png({ compressionLevel: 9, adaptiveFiltering: true, force: true })
-            .withMetadata()
-            .toBuffer() 
-            .then((data) => {
-                const fileName = onlyfileNam + sizeInfo.nickname + ext;
-                const f        = path.join(dir, fileName);
-                fs.writeFileSync(f, data);
-                const d = sizeOf(f);
-                saveFile({
-                  file_id  : onlyfileNam,
-                  file_seq : sizeInfo.seq,
-                  file_path: file_path,
-                  file_key : file_key,
-                  file_name: onlyfileNam + sizeInfo.nickname,
-                  file_ext : ext,
-                  file_size: fs.statSync(f).size,
-                  mime_type: req.file.mimetype,
-                  image_dir: common.today('YYYYMMDD'),
-                  temp_key : '',
-                  width    : d.width,
-                  height   : d.height
-                });
+            .then(i => {
+              //console.log(i);
+
+              saveFile({
+                file_id  : onlyfileNam,
+                file_seq : sizeInfo.seq,
+                file_path: file_path,
+                file_key : file_key,
+                file_name: onlyfileNam + sizeInfo.nickname,
+                file_ext : ext,
+                file_size: i.bitmap.data.length,
+                mime_type: req.file.mimetype,
+                image_dir: common.today('YYYYMMDD'),
+                temp_key : '',
+                width    : i.bitmap.width,
+                height   : i.bitmap.height
+              });  
             })
             .catch(err => {
-              console.log(err);
+              console.error(err);
             });
+
+
+        //   sharp(fullPath)
+        //     //.rotate(200)
+        //     .resize(
+        //       sizeInfo.w, 
+        //       sizeInfo.h,{
+        //         kernel: sharp.kernel.nearest,
+        //         fit: sizeInfo.fit //cover(수치대로), contain(포함하여,여백은 투명), fill(모두이미지포함,이그러짐), inside(절대사이즈 맞춤, 작아짐) or outside(절대사이즈 맞춤, 커짐). (optional, default 'cover')
+        //         //position: 'right bottom' //cover or contain. (optional, default 'centre')
+        //         //background: { r: 255, g: 255, b: 0, alpha: 0.5 }
+        //     })
+        //     .png({ compressionLevel: 9, adaptiveFiltering: true, force: true })
+        //     .withMetadata()
+        //     .toBuffer() 
+        //     .then((data) => {
+        //         const fileName = onlyfileNam + sizeInfo.nickname + ext;
+        //         const f        = path.join(dir, fileName);
+        //         fs.writeFileSync(f, data);
+        //         const d = sizeOf(f);
+        //         saveFile({
+        //           file_id  : onlyfileNam,
+        //           file_seq : sizeInfo.seq,
+        //           file_path: file_path,
+        //           file_key : file_key,
+        //           file_name: onlyfileNam + sizeInfo.nickname,
+        //           file_ext : ext,
+        //           file_size: fs.statSync(f).size,
+        //           mime_type: req.file.mimetype,
+        //           image_dir: common.today('YYYYMMDD'),
+        //           temp_key : '',
+        //           width    : d.width,
+        //           height   : d.height
+        //         });
+        //     })
+        //     .catch(err => {
+        //       console.log(err);
+        //     });
         }
 
         res.status(200).json({ imageUrl: img_url });
