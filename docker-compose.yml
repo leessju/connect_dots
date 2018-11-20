@@ -1,11 +1,24 @@
 version: "3"
 services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      # - ./php/content:/srv/www/content
+      # - /Users/nicejames/learn/nginx/01/static:/srv/www/static
+      - ./server/config/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - node
+    environment:
+      WAIT_HOSTS: node:5000
   mongo:
     image: mongo
     container_name: mongo
     # restart: always
     volumes:
-      - /Users/nicejames/learn/db_data/01:/data
+      - /Users/nicejames/learn/mongodb/connect_dots:/data
     ports:
       - "27017:27017"
   # mongo:
@@ -37,7 +50,7 @@ services:
     command: "pm2-runtime process.yml"
     environment:
       WAIT_HOSTS: mongo:27017
-    links:
+    depends_on:
       - mongo
  # https://www.youtube.com/watch?v=hP77Rua1E0c&t=320s
 

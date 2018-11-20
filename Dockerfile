@@ -76,3 +76,6 @@ CMD /wait && pm2-runtime process.yml
 # https://github.com/vishnubob/wait-for-it
 # https://dev.to/hugodias/wait-for-mongodb-to-start-on-docker-3h8b
 # https://stackoverflow.com/questions/51938049/mongodb-connection-error-inside-docker-container
+
+
+# https://dev.to/domysee/setting-up-a-reverse-proxy-with-nginx-and-docker-compose-29jg
